@@ -1,0 +1,16 @@
+app = "staypay-backend-sample"
+primary_region = "iad"
+
+[build]
+  image = "Dockerfile"
+
+[env]
+  PORT = "3000"
+
+[[services]]
+  internal_port = 3000
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
