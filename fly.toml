@@ -1,8 +1,9 @@
 app = "staypay-backend-sample"
 primary_region = "iad"
 
+# This tells Fly.io to use the Dockerfile in the project root
 [build]
-  image = "Dockerfile"
+  dockerfile = "Dockerfile"
 
 [env]
   PORT = "3000"

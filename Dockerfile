@@ -1,19 +1,23 @@
-# Use an official Node runtime as the base image
-FROM node:18-slim
+# Use an official Node.js runtime as a parent image
+FROM node:20-slim
 
-# Create app directory
-WORKDIR /usr/src/app
+# Set the working directory in the container
+WORKDIR /app
 
-# Install app dependencies
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
-RUN npm install --production
 
-# Bundle app source
+# Install production dependencies
+# Using --omit=dev ensures devDependencies (like nodemon) are not installed
+RUN npm install --omit=dev
+
+# Copy the rest of your application's source code
 COPY . .
 
-# Expose port
-ENV PORT=3000
+# The port your app will run on inside the container
+# Your hosting service (Fly.io) will map this to a public port
 EXPOSE 3000
 
-# Start the server
+# The command to start your server
+# We use your actual server file: server.js
 CMD ["node", "server.js"]
