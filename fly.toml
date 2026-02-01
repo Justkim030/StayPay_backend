@@ -1,4 +1,4 @@
-app = "staypay-backend"
+app = "staypay-backend-app"
 primary_region = "iad"
 
 # This tells Fly.io to use the Dockerfile in the project root
