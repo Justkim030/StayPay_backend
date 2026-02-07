@@ -4,20 +4,20 @@ FROM node:20-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Set the environment to production
+ENV NODE_ENV=production
+
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install production dependencies
-# Using --omit=dev ensures devDependencies (like nodemon) are not installed
+# Install production-only dependencies
 RUN npm install --omit=dev
 
-# Copy the rest of your application's source code
+# Copy the rest of your application code
 COPY . .
 
-# The port your app will run on inside the container
-# Your hosting service (Fly.io) will map this to a public port
+# Expose the port the app runs on (Railway will map this)
 EXPOSE 3000
 
 # The command to start your server
-# We use your actual server file: server.js
 CMD ["node", "server.js"]
