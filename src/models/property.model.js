@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'users', // This is a reference to another model
+        model: 'users',
         key: 'id',
       },
     },
@@ -19,25 +19,30 @@ module.exports = (sequelize, DataTypes) => {
     },
     address: {
       type: DataTypes.STRING,
+      allowNull: true, // Making address optional
+    },
+    // --- NEW FIELDS ---
+    caretaker_name: {
+      type: DataTypes.STRING,
       allowNull: true,
+    },
+    caretaker_phone: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    total_rooms: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
     },
   }, {
     tableName: 'properties',
-    timestamps: true, // Automatically add createdAt and updatedAt fields
+    timestamps: true,
   });
 
   Property.associate = (models) => {
-    // A property belongs to one landlord
-    Property.belongsTo(models.User, {
-      foreignKey: 'landlord_id',
-      as: 'landlord',
-    });
-
-    // A property can have many tenancies
-    Property.hasMany(models.Tenancy, {
-      foreignKey: 'property_id',
-      as: 'tenancies',
-    });
+    Property.belongsTo(models.User, { foreignKey: 'landlord_id', as: 'landlord' });
+    Property.hasMany(models.Tenancy, { foreignKey: 'property_id', as: 'tenancies' });
   };
 
   return Property;

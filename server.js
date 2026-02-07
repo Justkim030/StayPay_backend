@@ -3,9 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const { sequelize } = require('./src/config/db');
-const { initWebSocket } = require('./src/websocket'); // Import the WebSocket initializer
+const { initWebSocket } = require('./src/websocket');
 
-// Import API routes
+// API routes
 const authRoutes = require('./src/api/auth.routes.js');
 const landlordRoutes = require('./src/api/landlord.routes.js');
 const tenantRoutes = require('./src/api/tenant.routes.js');
@@ -14,7 +14,6 @@ const mpesaRoutes = require('./src/api/mpesa.routes.js');
 const app = express();
 const server = http.createServer(app);
 
-// Initialize the WebSocket server and pass it the main HTTP server
 initWebSocket(server);
 
 // Middleware
@@ -40,6 +39,8 @@ const startServer = async () => {
       await sequelize.sync({ alter: true });
       console.log('Models synchronized with alter:true');
     }
+
+    // ** The redundant ensureProperties() call has been removed **
 
     server.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
