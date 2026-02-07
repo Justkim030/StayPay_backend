@@ -1,27 +1,19 @@
 require('dotenv').config();
 
-const productionConfig = {
-  url: process.env.DATABASE_URL,
-  dialect: 'mysql',
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
-  }
-};
-
-const developmentConfig = {
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT || 3306,
-  dialect: 'mysql'
-};
-
+// This single configuration is used for all environments.
+// It relies on the DATABASE_URL environment variable, which is the standard for hosting providers.
 module.exports = {
-  development: developmentConfig,
-  test: developmentConfig, // Use development config for tests
-  production: productionConfig
+  // We define the 'production' key because NODE_ENV is set to production.
+  production: {
+    url: process.env.DATABASE_URL,
+    dialect: 'mysql',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false // Required for Railway and other cloud DBs
+      }
+    },
+    // Add a logging function to see the exact error if it fails again
+    logging: (msg) => console.log('[Sequelize]', msg)
+  }
 };
