@@ -1,19 +1,23 @@
 require('dotenv').config();
 
-// This single configuration is used for all environments.
-// It relies on the DATABASE_URL environment variable, which is the standard for hosting providers.
 module.exports = {
-  // We define the 'production' key because NODE_ENV is set to production.
+  development: {
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 3306,
+    dialect: 'mysql'
+  },
   production: {
-    url: process.env.DATABASE_URL,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
     dialect: 'mysql',
     dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false // Required for Railway and other cloud DBs
-      }
-    },
-    // Add a logging function to see the exact error if it fails again
-    logging: (msg) => console.log('[Sequelize]', msg)
+      // No SSL needed for internal Railway connections
+    }
   }
 };
