@@ -1,19 +1,18 @@
 require('dotenv').config();
 
-// This explicit configuration is the most robust way to ensure
-// the CLI connects correctly in any environment.
+// This is the most robust configuration for a hosted environment like Railway.
+// It relies on a single, complete DATABASE_URL connection string.
 module.exports = {
+  // This key MUST be 'production' to match the NODE_ENV in the Dockerfile.
   production: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: 'mysql', // Explicitly set to mysql
+    // The 'url' property tells Sequelize CLI to use the full connection string.
+    // The dialect (mysql) is automatically inferred from the URL scheme.
+    url: process.env.DATABASE_URL,
+    dialect: 'mysql', // Explicitly setting for clarity and safety
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false
+        rejectUnauthorized: false // Required for Railway's public proxy
       }
     }
   }
