@@ -1,23 +1,18 @@
 require('dotenv').config();
 
 module.exports = {
-  development: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT || 3306,
-    dialect: 'mysql'
-  },
+  // This key MUST be 'production' to match the NODE_ENV in the Dockerfile
   production: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+    // This tells Sequelize CLI to use the connection string from the environment
+    url: process.env.DATABASE_URL,
     dialect: 'mysql',
+
+    // ** THE FIX IS HERE: SSL is required for all public connections **
     dialectOptions: {
-      // No SSL needed for internal Railway connections
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
     }
   }
 };

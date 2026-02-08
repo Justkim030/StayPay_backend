@@ -1,6 +1,7 @@
+# Ignore the node_modules directory, as dependencies are installed inside the container
 node_modules
-npm-debug.log
+
+# ** THE CRITICAL FIX **
+# Ignore the local .env file. This prevents it from being copied into the Docker
+# image and overriding the production environment variables from the Railway dashboard.
 .env
-.env.local
-.DS_Store
-coverage
