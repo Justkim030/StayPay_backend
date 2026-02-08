@@ -5,7 +5,6 @@ const http = require('http');
 const { sequelize } = require('./src/config/db');
 const { initWebSocket } = require('./src/websocket');
 
-// API routes
 const authRoutes = require('./src/api/auth.routes.js');
 const landlordRoutes = require('./src/api/landlord.routes.js');
 const tenantRoutes = require('./src/api/tenant.routes.js');
@@ -16,11 +15,9 @@ const server = http.createServer(app);
 
 initWebSocket(server);
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/landlord', landlordRoutes);
 app.use('/api/tenants', tenantRoutes);
@@ -35,12 +32,10 @@ const startServer = async () => {
     await sequelize.authenticate();
     console.log('Database connected successfully.');
 
-    if (process.env.DB_SYNC_ALTER === 'true') {
-      await sequelize.sync({ alter: true });
-      console.log('Models synchronized with alter:true');
-    }
-
-    // ** The redundant ensureProperties() call has been removed **
+    // ** EXECUTING OPTION 1: Using sequelize.sync() **
+    // This will create the tables if they do not exist.
+    await sequelize.sync({ alter: true });
+    console.log('All models were synchronized successfully.');
 
     server.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
